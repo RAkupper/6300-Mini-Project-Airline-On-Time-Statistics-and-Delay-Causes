@@ -1,0 +1,18 @@
+AIRLINE_Name,AIRPORT_Name,avg_DepDelayMinutes
+"Southwest Airlines Co.: WN","Newark, NJ: Newark Liberty International",20.355086372360844
+"Alaska Airlines Inc.: AS","Nashville, TN: Nashville International",26.508474576271187
+"Hawaiian Airlines Inc.: HA","Sacramento, CA: Sacramento International",36.43333333333333
+"Spirit Air Lines: NK","Akron, OH: Akron-Canton Regional",37.41304347826087
+"PSA Airlines Inc.: OH","New York, NY: LaGuardia",37.78
+"JetBlue Airways: B6","Sarasota/Bradenton, FL: Sarasota/Bradenton International",38.266666666666666
+"Republic Airline: YX","San Antonio, TX: San Antonio International",39.2972972972973
+"Delta Air Lines Inc.: DL","Charleston/Dunbar, WV: Yeager",43.58064516129032
+"Envoy Air: MQ","Marquette, MI: Sawyer International",44.588235294117645
+"American Airlines Inc.: AA","Cincinnati, OH: Cincinnati/Northern Kentucky International",47.88333333333333
+"Mesa Airlines Inc.: YV","Dayton, OH: James M Cox/Dayton International",52.875
+"Endeavor Air Inc.: 9E","Key West, FL: Key West International",54.37931034482759
+"SkyWest Airlines Inc.: OO","Hartford, CT: Bradley International",62.5
+"Frontier Airlines Inc.: F9","Fort Lauderdale, FL: Fort Lauderdale-Hollywood International",67.10526315789474
+"Allegiant Air: G4","Plattsburgh, NY: Plattsburgh International",75.38709677419355
+"United Air Lines Inc.: UA","Knoxville, TN: McGhee Tyson",128.52941176470588
+"ExpressJet Airlines LLC: EV","Moline, IL: Quad City International",179

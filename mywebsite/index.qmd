@@ -1,0 +1,13 @@
+---
+title: "6300 Visualization"
+description: "Post description"
+author: "Tianwei Shi"
+date: "11/28/2025"
+format: html
+---
+
+```{python}
+import pandas
+
+
+```
