@@ -1,4 +1,4 @@
-DayOfWeek,count(Flight_Number_Reporting_Airline),rank_number_flights
+DayOfWeek,num_of_flights,rank_number_flights
 5,98173,1
 4,94492,2
 1,82901,3

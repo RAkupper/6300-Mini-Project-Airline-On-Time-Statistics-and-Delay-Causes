@@ -4,10 +4,167 @@ description: "Post description"
 author: "Tianwei Shi"
 date: "11/28/2025"
 format: html
+jupyter: python3
 ---
 
 ```{python}
-import pandas
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+```
+
+```{python}
+# Problem 1
+max_delay = pd.read_csv("../data/MiniProject_problem1_Tianwei_Shi_ts1553 .csv")
+early_dep = pd.read_csv("../data/MiniProject_problem2_Tianwei_Shi_ts1553 .csv")
+
+max_delay['max_DepDelayHours'] = (max_delay['max_DepDelayMinutes']/60).round(2)
+max_delay = max_delay.sort_values('max_DepDelayHours', ascending=True)
+
+early_dep["Early_Departure_Rank"] = range(1, len(min_delay) + 1)
+
+departure_data = max_delay.merge(early_dep[['Name','Early_Departure_Rank']],on='Name', how='left')
+
+avg_delay = max_delay['max_DepDelayHours'].mean().round(2)
+
+fig = make_subplots(
+    rows=2, cols=1,
+    shared_xaxes=True,
+    vertical_spacing=0.12,
+    subplot_titles=("Early Departure Ranking","Maximal Departure Delay (hours)"
+                    )
+)
+
+fig.add_trace(
+    go.Scatter(
+        x=departure_data["Name"],
+        y=departure_data["Early_Departure_Rank"],
+        mode="markers+text",
+        marker=dict(size=8, color="crimson"),
+        name="Early Departure Ranking"
+    ),
+    row=1, col=1
+)
+
+fig.add_trace(
+    go.Bar(
+        x=departure_data["Name"],
+        y=departure_data["max_DepDelayHours"],
+        name="Maximal Departure Delay (hours)",
+        text=[f"{v:.2f}" for v in departure_data["max_DepDelayHours"]],
+        textposition="outside",
+        marker_color="steelblue",
+        opacity=0.85
+    ),
+    row=2, col=1
+)
+
+fig.add_hline(
+    y=avg_delay,              
+    line_dash="dash",             
+    line_color="black", 
+    opacity = 0.5,            
+    line_width=1.5,                
+    annotation_text=f"Average: {avg_delay:.2f}", 
+    annotation_position="right",
+    row=2, col=1
+)
+
+fig.update_yaxes(
+    title_text="Maximal Departure Delay (h)",
+    row=2, col=1
+)
+
+fig.update_yaxes(
+    title_text="Early Departure Rank",
+    # autorange="reversed",      
+    row=1, col=1
+)
+
+fig.update_layout(
+    title="Airline Performance: Delay vs Early Departure",
+    title_x=0.5,
+    template="plotly_white",
+    height=750,
+    xaxis_tickangle=45,
+    showlegend=False
+)
+
+fig
+# fig=px.bar(
+#     departure_data,
+#     x = "Name",
+#     y = "max_DepDelayHours",
+#     title = "The maximal departure delay in hours of different airlines",
+#     labels = {
+#         "Name":"Airlines",
+#         "max_DepDelayHours":"Maximal Departure of Delay"
+#     },
+#     text="max_DepDelayHours",    
+#     # color="Early_Departure_Rank",           
+#     # color_continuous_scale="Viridis"       
+#     # color="max_DepDelayHours",           
+#     # color_continuous_scale="Viridis"
+
+# )
+
+# fig.add_hline(
+#     y=avg_delay,              
+#     line_dash="dash",             
+#     line_color="black", 
+#     opacity = 0.5,            
+#     line_width=1.5,                
+#     annotation_text=f"Average: {avg_delay:.2f}", 
+#     annotation_position="right"
+# )
 
 
+# fig.update_layout(
+#     title_x=0.5,
+#     template="plotly_white",
+#     xaxis=dict(tickangle=45),   
+#     yaxis=dict(showgrid=False),
+#     height=500,
+#     margin=dict(l=60, r=60, t=80, b=120)
+# )
+
+# fig
+
+```
+
+
+```{python}
+DayofWeek = pd.read_csv('../data/MiniProject_problem3_Tianwei_Shi_ts1553 .csv')
+print(DayofWeek)
+
+fig=px.bar(
+    DayofWeek,
+    x = "DayOfWeek",
+    y = "num_of_flights",
+    title = "Flight Volume by Day of the Week",
+    labels = {
+        "DayOfWeek":"Day of the Week",
+        "num_of_flights":"Number of Flights"
+    },
+    text="num_of_flights", 
+)
+
+fig.update_traces(marker_color="steelblue")
+
+fig.update_layout(
+    title_x=0.5,
+    template="plotly_white",   
+    yaxis=dict(showgrid=False),
+    height=500,
+    margin=dict(l=60, r=60, t=80, b=120)
+)
+
+fig
+```
+
+
+```{python}
+airport = pd.read_csv('../data/MiniProject_problem4_Tianwei_Shi_ts1553 .csv')
+print(airport)
 ```
