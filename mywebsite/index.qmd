@@ -22,7 +22,7 @@ early_dep = pd.read_csv("../data/MiniProject_problem2_Tianwei_Shi_ts1553 .csv")
 max_delay['max_DepDelayHours'] = (max_delay['max_DepDelayMinutes']/60).round(2)
 max_delay = max_delay.sort_values('max_DepDelayHours', ascending=True)
 
-early_dep["Early_Departure_Rank"] = range(1, len(min_delay) + 1)
+early_dep["Early_Departure_Rank"] = range(1, len(early_dep) + 1)
 
 departure_data = max_delay.merge(early_dep[['Name','Early_Departure_Rank']],on='Name', how='left')
 
@@ -41,7 +41,7 @@ fig.add_trace(
         x=departure_data["Name"],
         y=departure_data["Early_Departure_Rank"],
         mode="markers+text",
-        marker=dict(size=8, color="crimson"),
+        marker=dict(size=10, color="#EF553B"),
         name="Early Departure Ranking"
     ),
     row=1, col=1
@@ -66,13 +66,13 @@ fig.add_hline(
     line_color="black", 
     opacity = 0.5,            
     line_width=1.5,                
-    annotation_text=f"Average: {avg_delay:.2f}", 
+    annotation_text=f"Average: {avg_delay:.2f}hrs", 
     annotation_position="right",
     row=2, col=1
 )
 
 fig.update_yaxes(
-    title_text="Maximal Departure Delay (h)",
+    title_text="Maximal Departure Delay (hrs)",
     row=2, col=1
 )
 
@@ -86,57 +86,16 @@ fig.update_layout(
     title="Airline Performance: Delay vs Early Departure",
     title_x=0.5,
     template="plotly_white",
-    height=750,
-    xaxis_tickangle=45,
-    showlegend=False
+    height=800,
+    xaxis_tickangle=45
 )
 
-fig
-# fig=px.bar(
-#     departure_data,
-#     x = "Name",
-#     y = "max_DepDelayHours",
-#     title = "The maximal departure delay in hours of different airlines",
-#     labels = {
-#         "Name":"Airlines",
-#         "max_DepDelayHours":"Maximal Departure of Delay"
-#     },
-#     text="max_DepDelayHours",    
-#     # color="Early_Departure_Rank",           
-#     # color_continuous_scale="Viridis"       
-#     # color="max_DepDelayHours",           
-#     # color_continuous_scale="Viridis"
-
-# )
-
-# fig.add_hline(
-#     y=avg_delay,              
-#     line_dash="dash",             
-#     line_color="black", 
-#     opacity = 0.5,            
-#     line_width=1.5,                
-#     annotation_text=f"Average: {avg_delay:.2f}", 
-#     annotation_position="right"
-# )
-
-
-# fig.update_layout(
-#     title_x=0.5,
-#     template="plotly_white",
-#     xaxis=dict(tickangle=45),   
-#     yaxis=dict(showgrid=False),
-#     height=500,
-#     margin=dict(l=60, r=60, t=80, b=120)
-# )
-
-# fig
-
+fig.show()
 ```
 
 
 ```{python}
 DayofWeek = pd.read_csv('../data/MiniProject_problem3_Tianwei_Shi_ts1553 .csv')
-print(DayofWeek)
 
 fig=px.bar(
     DayofWeek,
@@ -160,11 +119,142 @@ fig.update_layout(
     margin=dict(l=60, r=60, t=80, b=120)
 )
 
-fig
+fig.show()
 ```
 
 
 ```{python}
 airport = pd.read_csv('../data/MiniProject_problem4_Tianwei_Shi_ts1553 .csv')
-print(airport)
+fig = go.Figure(go.Indicator(
+    mode = "number",
+    value = airport['avg_DepDelayMinutes'].iloc[0],              
+    number={
+        "font": {"color": "#EF553B"} 
+    },
+    title = {"text": f"{airport['Name'].iloc[0]} Average Departure Delay (min)"},
+))
+
+fig.show()
+```
+
+
+```{python}
+airline_airport=pd.read_csv('../data/MiniProject_problem5_Tianwei_Shi_ts1553 .csv')
+
+fig_bubble = px.scatter(
+    airline_airport,
+    x="AIRLINE_Name",
+    y="AIRPORT_Name",
+    size="avg_DepDelayMinutes",
+    color="avg_DepDelayMinutes",
+    color_continuous_scale="Viridis",
+    hover_name="AIRLINE_Name",
+    hover_data={"avg_DepDelayMinutes": True, "AIRPORT_Name": True},
+    labels={
+        "AIRLINE_Name": "Airline",
+        "AIRPORT_Name": "Airport",
+        "avg_DepDelayMinutes": "Avg Departure Delay (min)"
+    },
+    title="Airport with Highest Average Departure Delay for Each Airline"
+)
+
+fig = go.Figure(fig_bubble)
+
+fig.add_trace(
+    go.Bar(
+        x=departure_data["Name"],
+        y=departure_data["max_DepDelayHours"],
+        name="Maximal Departure Delay (hrs)",
+        marker_color="lightgray",
+        opacity=0.3,            
+        yaxis="y2"               
+    ))
+
+fig.update_layout(
+    yaxis2=dict(
+        overlaying="y",
+        side="right",
+        showticklabels=False,
+        range=[0, departure_data["max_DepDelayHours"].max() * 1.2]
+    )
+)
+
+
+fig.update_layout(
+    xaxis_tickangle=45,
+    height=800,
+    template="plotly_white",
+    legend=dict(
+        yanchor="top",
+        y=1.05,
+        xanchor="left",
+        x=0.01
+    )
+)
+
+fig.show()
+```
+
+```{python}
+## LLM Usage Statement
+## An LLM (ChatGPT) was used to assist in generating a new CSV file that includes geographic information (latitude and longitude) for each airport. This enabled the construction of the geographic visualization used in this section.
+
+cancel_flight = pd.read_csv('../data/MiniProject_geoinfo.csv')
+
+fig = px.scatter_geo(
+    cancel_flight,
+    lat="lat",
+    lon="lon",
+    color="Reason",
+    size="num_cancelations",
+    hover_name="Airport",
+    hover_data={
+        "num_cancelations": True,
+        "Reason": True,
+        "lat": False,
+        "lon": False
+    },
+    projection="albers usa",
+    title="Most Frequent Cancellation Reason for Each U.S. Airport"
+)
+
+fig.update_layout(
+    height=850,
+    template="plotly_white",
+    legend=dict(
+        title="Cancellation Reason",
+        orientation="v",
+        yanchor="top",
+        y=1,
+        xanchor="right",
+        x=1
+    ),
+    margin=dict(t=80, l=40, r=40, b=40)
+)
+
+fig.show()
+```
+
+```{python}
+pre_avg_num = pd.read_csv('../data/MiniProject_problem7_Tianwei_Shi_ts1553 .csv')
+
+fig = px.line(
+    pre_avg_num,
+    x="FlightDate",
+    y="avg_total_flights",
+    title="Average number of flights over the preceding 3 days",
+    markers=True,
+    color_discrete_sequence=["#ff7f0e"],
+)
+
+fig.update_traces(line=dict(width=3))
+
+fig.update_layout(
+    xaxis_title="Date",
+    yaxis_title="Number of Flights (Preceding 3-Day)",
+    template="plotly_white",
+    height=600
+)
+
+fig.show()
 ```

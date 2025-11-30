@@ -28,9 +28,10 @@ group by DayOfWeek;
 
 
 # Problem 4
-/* Find the airport that has the highest average departure delay among all airports. Consider 0 minutes delay */
-select LAI.Name, avg(ap.DepDelayMinutes) as avg_DepDelayMinutes
-from al_perf as ap join L_AIRPORT_ID as LAI on ap.OriginAirportID=LAI.ID
+/* Find the airport that has the highest average departure delay among all airports. Consider 0 minutes delay
+for flights that departed early. Output one line of results: the airport name, code, and average delay */
+select LAI.Name, LA.Code, avg(ap.DepDelayMinutes) as avg_DepDelayMinutes
+from (L_AIRPORT as LA join L_AIRPORT_ID as LAI on LA.Name=LAI.Name) join al_perf as ap on  ap.OriginAirportID=LAI.ID
 group by LAI.Name
 order by avg_DepDelayMinutes desc
 limit 1;
