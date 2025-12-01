@@ -51,8 +51,29 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "Tianwei Shi (Sophie)",
     "section": "",
-    "text": "About this site"
+    "text": "I’m Tianwei Shi, also called Sophie. This is my first time coming to the US pursuing my master degree and the academic success.\nI was born in Jiangsu and grew up in Shanghai. I achieved my Bachelor degree of Engineering in Shanghai University but didn’t want to stop there. I am still confused with some most basic concepts in Data Science field, wondering how it is applied in the prestigious enterprise and the real-world to faciliate the good business decision or just make the world better. That’s the reason why I came here.\nBesides these study stuff, I’m also a deep lover of Anime and Japanese culture. I can speak a little Japanese and am quite familiar with the Japanese transportation system. I also love drawing and riding which can help me refresh my brain from high-pressure and heavy workload.\nLove Georgetown. Hoya Saxa!!"
+  },
+  {
+    "objectID": "about.html#about-me",
+    "href": "about.html#about-me",
+    "title": "Tianwei Shi (Sophie)",
+    "section": "",
+    "text": "I’m Tianwei Shi, also called Sophie. This is my first time coming to the US pursuing my master degree and the academic success.\nI was born in Jiangsu and grew up in Shanghai. I achieved my Bachelor degree of Engineering in Shanghai University but didn’t want to stop there. I am still confused with some most basic concepts in Data Science field, wondering how it is applied in the prestigious enterprise and the real-world to faciliate the good business decision or just make the world better. That’s the reason why I came here.\nBesides these study stuff, I’m also a deep lover of Anime and Japanese culture. I can speak a little Japanese and am quite familiar with the Japanese transportation system. I also love drawing and riding which can help me refresh my brain from high-pressure and heavy workload.\nLove Georgetown. Hoya Saxa!!"
+  },
+  {
+    "objectID": "about.html#academic-interests",
+    "href": "about.html#academic-interests",
+    "title": "Tianwei Shi (Sophie)",
+    "section": "Academic Interests",
+    "text": "Academic Interests\n\nData Crawling\nBusiness Analysis\nMachine Learning\nData Visualization"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Tianwei Shi (Sophie)",
+    "section": "Education",
+    "text": "Education\nGeorgetown University (M.S.) | Washington, D.C.\n2025\nShanghai University (B.E.) | Shanghai, China\n2020"
   }
 ]

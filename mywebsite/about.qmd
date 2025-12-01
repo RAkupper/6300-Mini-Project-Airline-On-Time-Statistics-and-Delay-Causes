@@ -1,5 +1,35 @@
 ---
-title: "About"
+title: "Tianwei Shi (Sophie)"
+image: ../image/photo.jpg
+about:
+  template: trestles
+  image-shape: rectangle
+format: 
+    html:
+        embed-resources: true
 ---
 
-About this site
+## About Me
+
+I'm Tianwei Shi, also called Sophie. This is my first time coming to the US pursuing my master degree and the academic success. 
+
+I was born in Jiangsu and grew up in Shanghai. I achieved my Bachelor degree of Engineering in Shanghai University but didn't want to stop there. I am still confused with some most basic concepts in Data Science field, wondering how it is applied in the prestigious enterprise and the real-world to faciliate the good business decision or just make the world better. That's the reason why I came here.
+
+Besides these study stuff, I'm also a deep lover of Anime and Japanese culture. I can speak a little Japanese and am quite familiar with the Japanese transportation system. I also love drawing and riding which can help me refresh my brain from high-pressure and heavy workload. 
+
+Love Georgetown. Hoya Saxa!!
+
+## Academic Interests
+
+* Data Crawling
+* Business Analysis
+* Machine Learning
+* Data Visualization
+
+## Education
+
+**Georgetown University (M.S.)** | Washington, D.C.  
+*2025*
+
+**Shanghai University (B.E.)** | Shanghai, China  
+*2020*

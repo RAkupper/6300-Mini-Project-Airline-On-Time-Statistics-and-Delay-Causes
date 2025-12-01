@@ -8,7 +8,7 @@ website:
       - href: index.qmd
         text: Flight Story
       - href: about.qmd
-        text: Author
+        text: About Author
 
 format:
   html:
