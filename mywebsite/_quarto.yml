@@ -2,12 +2,13 @@ project:
   type: website
 
 website:
-  title: "mywebsite"
+  title: "Mini-Project"
   navbar:
     left:
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: Flight Story
+      - href: about.qmd
+        text: Author
 
 format:
   html:

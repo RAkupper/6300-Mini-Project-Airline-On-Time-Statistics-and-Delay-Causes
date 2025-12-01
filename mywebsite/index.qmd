@@ -1,11 +1,29 @@
 ---
-title: "6300 Visualization"
-description: "Post description"
+title: "Data-Driven Tips for a Better Flight in November"
+description: "This website is for Mini-Project of DSAN-6300"
 author: "Tianwei Shi"
-date: "11/28/2025"
-format: html
-jupyter: python3
+date: "11/30/2025"
+format: 
+    html:
+        code-fold: true
+        embed-resources: true
 ---
+
+## 1. Background
+
+![
+*https://www.rd.com/wp-content/uploads/2021/08/The-New-Rules-of-Airplane-Travel-According-to-a-Frequent-Flier-FT.jpg?fit=700%2C467?fit=750%2C750*](../image/airport.jpg)
+
+People enjoy flying, but the experience is not always smooth.
+Imagine walking into the airport full of excitement, only to see the word *Cancelled* glowing on the board. Or standing in a check-in line so long that you start checking whether you’ll miss your flight. We’ve all been there.
+
+But the good news is, just like we check the weather before going out, we can read travel data the same way. And November’s flight data gives us a few surprisingly helpful clues.
+
+
+## 2. The Secret to Avoiding the Crowds
+
+From the bar plot of **flight volume by day of the week**, we can see that **Saturday** consistently has the lowest traffic. Because fewer business trips and weekend departures make it the quietest travel day.
+
 
 ```{python}
 import pandas as pd
@@ -15,7 +33,149 @@ from plotly.subplots import make_subplots
 ```
 
 ```{python}
-# Problem 1
+DayofWeek = pd.read_csv('../data/MiniProject_problem3_Tianwei_Shi_ts1553 .csv')
+
+fig=px.bar(
+    DayofWeek,
+    x = "DayOfWeek",
+    y = "num_of_flights",
+    title = "Flight Volume by Day of the Week",
+    labels = {
+        "DayOfWeek":"Day of the Week",
+        "num_of_flights":"Number of Flights"
+    },
+    text="num_of_flights", 
+)
+
+fig.update_traces(marker_color="steelblue")
+
+fig.update_layout(
+    title_x=0.5,
+    height=500,
+    template="plotly_white",   
+    yaxis=dict(showgrid=False),
+    margin=dict(l=60, r=60, t=100, b=100)
+)
+
+fig.show()
+```
+
+
+In contrast, **monday** is heavily influenced by business travel, as many people fly out at the start of the workweek. **Thursday and Friday** are busy for two overlapping reasons: they are both business-travel return days and popular departure days for weekend trips. This combination pushes their flight volumes even higher than other weekdays. **Sunday** also ranks high because it is the main return-home day for weekend travelers.
+
+*If your route offers multiple daily flights, I will recommend **flying on Saturday to avoid crowds effectively**. However, if your destination has limited service, choosing a busier day may provide more flight options and reduce the risk of inconvenient schedules.*
+
+
+
+## 3. Thanksgiving’s Unexpected Quiet Days
+
+In 2018, Thanksgiving fell on November 22nd, and the time series chart shows **a clear drop in flight activity around the holiday.**
+
+In the three days leading up to the 22nd, the average number of flights was close to 20,000, as most people chose to travel or go home before the holiday itself. Between the 23rd and 25th, however, the preceding 3-day average number fell to about 15,000, the lowest level of the entire month. Once the 26th arrived, the preceding 3-day average number of flight volume quickly climbed back to around 21,000 as most travelers returning home from 23rd to 25th.
+
+
+```{python}
+pre_avg_num = pd.read_csv('../data/MiniProject_problem7_Tianwei_Shi_ts1553 .csv')
+
+fig = px.line(
+    pre_avg_num,
+    x="FlightDate",
+    y="avg_total_flights",
+    title="Average number of flights over the preceding 3 days",
+    markers=True,
+    color_discrete_sequence=["#ff7f0e"],
+)
+
+fig.update_traces(line=dict(width=3))
+
+fig.update_layout(
+    height=500,
+    template="plotly_white",
+    xaxis_title="Date",
+    yaxis_title="Number of Flights (Preceding 3-Day)",
+     margin=dict(l=60, r=60, t=100, b=120)
+
+)
+
+fig.show()
+```
+
+
+*This pattern suggests that **the days just before and just after Thanksgiving are noticeably quieter at airports.** Traveling during this period can mean fewer crowds, though it’s worth noting that some destinations may offer fewer flights, so checking availability ahead of time is important.*
+
+
+## 4. Weather-driven Disruptions
+
+Crowd levels are only part of the story.<br>
+The *cancellation map* for November 2018 shows that weather-related disruptions were concentrated in the **Midwest and Northeast**. A strong Polar Vortex brought extreme cold, lake-effect snow, and storms to the Lake Michigan region and the eastern coast, heavily affecting major airports such as **Chicago O’Hare**, which recorded **597 flight cancellations**, the highest totals in the country in that month. Airports around New York City also experienced significant disruption under the same weather system.
+
+
+```{python}
+## LLM Usage Statement
+## An LLM (ChatGPT) was used to assist in generating a new CSV file that includes geographic information (latitude and longitude) for each airport. This enabled the construction of the geographic visualization used in this section.
+
+cancel_flight = pd.read_csv('../data/MiniProject_geoinfo.csv')
+
+fig = px.scatter_geo(
+    cancel_flight,
+    lat="lat",
+    lon="lon",
+    color="Reason",
+    size="num_cancelations",
+    hover_name="Airport",
+    hover_data={
+        "num_cancelations": True,
+        "Reason": True,
+        "lat": False,
+        "lon": False
+    },
+    projection="albers usa",
+    title="Most Frequent Cancellation Reason for Each U.S. Airport"
+)
+
+fig.update_layout(
+    height=600,
+    template="plotly_white",
+    legend=dict(
+        title="Cancellation Reason",
+        orientation="v",
+        yanchor="top",
+        y=1,
+        xanchor="right",
+        x=1
+    ),
+    margin=dict(r=60, l=60, t=100,  b=80)
+)
+
+fig.show()
+```
+
+
+Meanwhile, the **Alpena County Regional Airport**, located in Michigan, has the **highest average departure delay of 46.3 min**, which is near the area influenced by strong Polar Vortex.
+
+
+```{python}
+airport = pd.read_csv('../data/MiniProject_problem4_Tianwei_Shi_ts1553 .csv')
+fig = go.Figure(go.Indicator(
+    mode = "number",
+    value = airport['avg_DepDelayMinutes'].iloc[0],              
+    number={
+        "font": {"color": "#EF553B"} 
+    },
+    title = {"text": f"{airport['Name'].iloc[0]} Average Departure Delay (min)"},
+))
+
+fig.update_layout(
+    height=300)
+
+fig.show()
+```
+
+
+The eastern coast also experiences frequent heavy snow in late November, and since most major cities are clustered there, the high flight volume leads to more cancellations.
+
+
+```{python}
 max_delay = pd.read_csv("../data/MiniProject_problem1_Tianwei_Shi_ts1553 .csv")
 early_dep = pd.read_csv("../data/MiniProject_problem2_Tianwei_Shi_ts1553 .csv")
 
@@ -26,6 +186,79 @@ early_dep["Early_Departure_Rank"] = range(1, len(early_dep) + 1)
 
 departure_data = max_delay.merge(early_dep[['Name','Early_Departure_Rank']],on='Name', how='left')
 
+airline_airport=pd.read_csv('../data/MiniProject_problem5_Tianwei_Shi_ts1553 .csv')
+
+fig_bubble = px.scatter(
+    airline_airport,
+    x="AIRLINE_Name",
+    y="AIRPORT_Name",
+    size="avg_DepDelayMinutes",
+    color="avg_DepDelayMinutes",
+    color_continuous_scale="Viridis",
+    hover_name="AIRLINE_Name",
+    hover_data={"avg_DepDelayMinutes": True, "AIRPORT_Name": True},
+    labels={
+        "AIRLINE_Name": "Airline",
+        "AIRPORT_Name": "Airport",
+        "avg_DepDelayMinutes": "Avg Departure Delay (min)"
+    },
+    title="Airport with the Highest Average Departure Delay for Each Airline"
+)
+
+fig = go.Figure(fig_bubble)
+
+fig.add_trace(
+    go.Bar(
+        x=departure_data["Name"],
+        y=departure_data["max_DepDelayHours"],
+        name="Maximal Departure Delay (hrs)",
+        marker_color="lightgray",
+        opacity=0.3,            
+        yaxis="y2"               
+    ))
+
+fig.update_layout(
+    yaxis2=dict(
+        overlaying="y",
+        side="right",
+        showticklabels=False,
+        range=[0, departure_data["max_DepDelayHours"].max() * 1.2]
+    )
+)
+
+
+fig.update_layout(
+    xaxis=dict(tickangle=45),
+    height=600,
+    width=1000,
+    template="plotly_white",
+    legend=dict(
+        yanchor="top",
+        y=1.05,
+        xanchor="left",
+        x=0.01
+    ),
+    margin=dict(l=60, r=60, t=100, b=150)
+)
+
+fig.show()
+```
+
+
+The delay condition follows the same pattern as cancellations. The airports with the highest average departure delay for each airline are concentrated in the northeastern states and the Midwest. 
+
+*Therefore, to avoid these disruptions, it is wise to avoid these destinations during late November. **Traveling to the West or Southwest generally offers a smoother experience,** with fewer cancellations, fewer delays, and far less extreme weather. All of which contribute to a more reliable trip.*
+
+
+## 5. Airlines that Make Your Trip Smoother
+
+However, there are still some **good airline suggestions** that can help you avoid heavy delays and reduce the chance of cancellations.
+
+Combining this plot with the one above, I would recommend **Southwest Airlines, Alaska Airlines, JetBlue Airways, and PSA Airlines**. These airlines show lower maximal departure delays and higher early-departure rankings. Their highest average departure-delay airports also have lower delay minutes compared with other carriers. Frontier Airlines also performs well in terms of maximal departure delay, but it faces high average delays at Fort Lauderdale–Hollywood International Airport. 
+
+
+
+```{python}
 avg_delay = max_delay['max_DepDelayHours'].mean().round(2)
 
 fig = make_subplots(
@@ -82,179 +315,35 @@ fig.update_yaxes(
     row=1, col=1
 )
 
+fig.update_xaxes(tickangle=45, row=2, col=1)
+
 fig.update_layout(
     title="Airline Performance: Delay vs Early Departure",
-    title_x=0.5,
     template="plotly_white",
     height=800,
-    xaxis_tickangle=45
-)
-
-fig.show()
-```
-
-
-```{python}
-DayofWeek = pd.read_csv('../data/MiniProject_problem3_Tianwei_Shi_ts1553 .csv')
-
-fig=px.bar(
-    DayofWeek,
-    x = "DayOfWeek",
-    y = "num_of_flights",
-    title = "Flight Volume by Day of the Week",
-    labels = {
-        "DayOfWeek":"Day of the Week",
-        "num_of_flights":"Number of Flights"
-    },
-    text="num_of_flights", 
-)
-
-fig.update_traces(marker_color="steelblue")
-
-fig.update_layout(
     title_x=0.5,
-    template="plotly_white",   
-    yaxis=dict(showgrid=False),
-    height=500,
-    margin=dict(l=60, r=60, t=80, b=120)
+    margin=dict(l=60, r=60, t=100, b=150)
 )
 
 fig.show()
 ```
 
 
-```{python}
-airport = pd.read_csv('../data/MiniProject_problem4_Tianwei_Shi_ts1553 .csv')
-fig = go.Figure(go.Indicator(
-    mode = "number",
-    value = airport['avg_DepDelayMinutes'].iloc[0],              
-    number={
-        "font": {"color": "#EF553B"} 
-    },
-    title = {"text": f"{airport['Name'].iloc[0]} Average Departure Delay (min)"},
-))
 
-fig.show()
-```
+*Overall, based on these data, the best recommendations are **Southwest Airlines** and **Alaska Airlines**, as they minimize disruptions to the greatest extent.*
 
 
-```{python}
-airline_airport=pd.read_csv('../data/MiniProject_problem5_Tianwei_Shi_ts1553 .csv')
 
-fig_bubble = px.scatter(
-    airline_airport,
-    x="AIRLINE_Name",
-    y="AIRPORT_Name",
-    size="avg_DepDelayMinutes",
-    color="avg_DepDelayMinutes",
-    color_continuous_scale="Viridis",
-    hover_name="AIRLINE_Name",
-    hover_data={"avg_DepDelayMinutes": True, "AIRPORT_Name": True},
-    labels={
-        "AIRLINE_Name": "Airline",
-        "AIRPORT_Name": "Airport",
-        "avg_DepDelayMinutes": "Avg Departure Delay (min)"
-    },
-    title="Airport with Highest Average Departure Delay for Each Airline"
-)
+## 6. Final Tips
 
-fig = go.Figure(fig_bubble)
+![ 
+*https://imageio.forbes.com/specials-images/imageserve/66ba827c8ff2be58a5e1ea62/Aircraft-landing-at-sunrise/0x0.jpg?width=960&dpr=1*](../image/flights.jpg)
 
-fig.add_trace(
-    go.Bar(
-        x=departure_data["Name"],
-        y=departure_data["max_DepDelayHours"],
-        name="Maximal Departure Delay (hrs)",
-        marker_color="lightgray",
-        opacity=0.3,            
-        yaxis="y2"               
-    ))
+- Choose less crowded days, especially Saturday or low-volume days around Thanksgiving.
 
-fig.update_layout(
-    yaxis2=dict(
-        overlaying="y",
-        side="right",
-        showticklabels=False,
-        range=[0, departure_data["max_DepDelayHours"].max() * 1.2]
-    )
-)
+- Avoid Midwest and Northeast destinations when possible in late November.
+
+- Select reliable airlines such as Southwest or Alaska to minimize disruptions.
 
 
-fig.update_layout(
-    xaxis_tickangle=45,
-    height=800,
-    template="plotly_white",
-    legend=dict(
-        yanchor="top",
-        y=1.05,
-        xanchor="left",
-        x=0.01
-    )
-)
 
-fig.show()
-```
-
-```{python}
-## LLM Usage Statement
-## An LLM (ChatGPT) was used to assist in generating a new CSV file that includes geographic information (latitude and longitude) for each airport. This enabled the construction of the geographic visualization used in this section.
-
-cancel_flight = pd.read_csv('../data/MiniProject_geoinfo.csv')
-
-fig = px.scatter_geo(
-    cancel_flight,
-    lat="lat",
-    lon="lon",
-    color="Reason",
-    size="num_cancelations",
-    hover_name="Airport",
-    hover_data={
-        "num_cancelations": True,
-        "Reason": True,
-        "lat": False,
-        "lon": False
-    },
-    projection="albers usa",
-    title="Most Frequent Cancellation Reason for Each U.S. Airport"
-)
-
-fig.update_layout(
-    height=850,
-    template="plotly_white",
-    legend=dict(
-        title="Cancellation Reason",
-        orientation="v",
-        yanchor="top",
-        y=1,
-        xanchor="right",
-        x=1
-    ),
-    margin=dict(t=80, l=40, r=40, b=40)
-)
-
-fig.show()
-```
-
-```{python}
-pre_avg_num = pd.read_csv('../data/MiniProject_problem7_Tianwei_Shi_ts1553 .csv')
-
-fig = px.line(
-    pre_avg_num,
-    x="FlightDate",
-    y="avg_total_flights",
-    title="Average number of flights over the preceding 3 days",
-    markers=True,
-    color_discrete_sequence=["#ff7f0e"],
-)
-
-fig.update_traces(line=dict(width=3))
-
-fig.update_layout(
-    xaxis_title="Date",
-    yaxis_title="Number of Flights (Preceding 3-Day)",
-    template="plotly_white",
-    height=600
-)
-
-fig.show()
-```
